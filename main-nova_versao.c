@@ -43,8 +43,6 @@ ArvAVL* cria_ArvAVL();
 
 void emOrdem_ArvAVL(ArvAVL *raiz);
 
-void preOrdem_ArvAVL(ArvAVL *raiz);
-
 int main() {
 	// int x = insere_ArvAVL (raiz,valor);
 	ArvAVL *arvore;
@@ -60,8 +58,6 @@ int main() {
 			insere_ArvAVL(arvore, chave);
 		}
 		emOrdem_ArvAVL(arvore);
-		printf(" \n ");
-		preOrdem_ArvAVL(arvore);
 	}
 	//emOrdem_ArvAVL(arvore);
 	
@@ -79,18 +75,8 @@ void emOrdem_ArvAVL(ArvAVL *raiz){
 		return;
 	if(*raiz != NULL){
 		emOrdem_ArvAVL(&((*raiz)->esq));
-		printf("%d (%d) ",(*raiz)->chave, (*raiz)->alt);
+		printf("%d ",(*raiz)->chave);
 		emOrdem_ArvAVL(&((*raiz)->dir));
-	}
-}
-
-void preOrdem_ArvAVL(ArvAVL *raiz){
-	if(raiz == NULL)
-		return;
-	if(*raiz != NULL){
-		printf("%d (%d) ",(*raiz)->chave,(*raiz)->alt);
-		preOrdem_ArvAVL(&((*raiz)->esq));
-		preOrdem_ArvAVL(&((*raiz)->dir));
 	}
 }
 
@@ -194,7 +180,7 @@ int insere_ArvAVL (ArvAVL *raiz, int chave){
 	int res;
 	if(*raiz == NULL){ // arvore vazia ou no folha
 		ArvAVL novo;
-		novo = (ArvAVL)malloc(sizeof(struct NO));
+		novo = (ArvAVL)malloc(sizeof(ArvAVL));
 		if(novo == NULL)
 			return 0;
 		

@@ -14,7 +14,7 @@ struct NO{
 	int alt; // altura do no
 	struct NO *esq;
 	struct NO *dir;
-	
+
 };
 
 typedef struct NO* ArvAVL;
@@ -43,32 +43,28 @@ ArvAVL* cria_ArvAVL();
 
 void emOrdem_ArvAVL(ArvAVL *raiz);
 
-void preOrdem_ArvAVL(ArvAVL *raiz);
-
 int main() {
 	// int x = insere_ArvAVL (raiz,valor);
 	ArvAVL *arvore;
-	
+
 	arvore = cria_ArvAVL();
-	
+
 	int chave=1;
-	
+
 	while (chave!=0) {
 		printf("\nDigite chave a ser inserida (zero para sair) : ");
 		scanf("%d",&chave);
 		if (chave!=0) {
 			insere_ArvAVL(arvore, chave);
 		}
-		emOrdem_ArvAVL(arvore);
-		printf(" \n ");
-		preOrdem_ArvAVL(arvore);
+		//emOrdem_ArvAVL(arvore);
 	}
 	//emOrdem_ArvAVL(arvore);
-	
-	
-	
-	
-	
+
+
+
+
+
 	printf("Hello, World!\n");
     return 0;
 }
@@ -79,18 +75,8 @@ void emOrdem_ArvAVL(ArvAVL *raiz){
 		return;
 	if(*raiz != NULL){
 		emOrdem_ArvAVL(&((*raiz)->esq));
-		printf("%d (%d) ",(*raiz)->chave, (*raiz)->alt);
+		printf("%d ",(*raiz)->chave);
 		emOrdem_ArvAVL(&((*raiz)->dir));
-	}
-}
-
-void preOrdem_ArvAVL(ArvAVL *raiz){
-	if(raiz == NULL)
-		return;
-	if(*raiz != NULL){
-		printf("%d (%d) ",(*raiz)->chave,(*raiz)->alt);
-		preOrdem_ArvAVL(&((*raiz)->esq));
-		preOrdem_ArvAVL(&((*raiz)->dir));
 	}
 }
 
@@ -115,12 +101,12 @@ void Rot_Simp_dir (ArvAVL *raiz){ // rotacao simples a direita: quer dizer que o
 	no = (*raiz)->esq;
 	(*raiz)->esq = no->dir;
 	no->dir = (*raiz);
-	
+
 	(*raiz)->alt = maior (alt_NO((*raiz)->esq),alt_NO((*raiz)->dir)) +1;
 	no->alt = maior(alt_NO(no->esq), alt_NO(no->dir))+1;  // alteracao das alturas, sempre sera isso. pego a maior altura entre os dois filhos e acrescento um. faco recursivamente ate a folha que eh 0.
-	
+
 	*raiz = no; // se faz necessaria a troca pois estamos usando uma referencia e, portanto, temos que definir a nova raiz.
-	
+
 }
 
 void Rot_Simp_esq (ArvAVL *raiz){  // rotacao simples a esquerda: quer dizer que o no inserido ficou a direida da subarvore da direita, ocasionando um fatbal +2. O ponteiro de ponteiro recebido como raiz é deste nó com fatbal +2.
@@ -128,23 +114,23 @@ void Rot_Simp_esq (ArvAVL *raiz){  // rotacao simples a esquerda: quer dizer que
 	no = (*raiz)->dir;
 	(*raiz)->dir = no->esq;
 	no->esq = (*raiz);
-	
+
 	(*raiz)->alt = maior(alt_NO((*raiz)->esq), alt_NO((*raiz)->dir))+1;
 	no->alt = maior(alt_NO(no->dir), alt_NO(no->esq))+1;
-	
+
 	*raiz = no;
 }
 
 void Rot_dupla_direita_met2 (ArvAVL *raiz){  // metodo mais simplorio, baseado na compreensao nao ministrada em aula de que a rotacao dupla a direita eh a rotacao simples a esquerda do no esquerdo da raiz e após isso a rotacao simples a direita da raiz
- 
+
 	Rot_Simp_esq(&(*raiz)->esq);  // interessante - endereçamento do no esq da raiz, dereferenciamento do referenciamento ( nao eh possivel acessar o no da esquerda simplesmente fazendo "raiz->esq" pois trata-se de um ponteiro de ponteiro.
-	
+
 	Rot_Simp_dir(&(*raiz)); // == Rot_Simp_dir (raiz);
 	// fazer uma rotacao simples a direita
 }
 
 void Rot_dupla_esquerda_met2 (ArvAVL *raiz){  // metodo mais simplorio, baseado na compreensao nao ministrada em aula de que a rotacao dupla a esquerda eh a rotacao simples a direita do no direito da raiz e após isso a rotacao simples a esquerda da raiz
- 
+
 	Rot_Simp_dir(&(*raiz)->dir);  // interessante - endereçamento do no dir da raiz
 	Rot_Simp_esq(&(*raiz)); // fazer uma rotacao simples
 }
@@ -154,18 +140,18 @@ void Rot_dupla_dir (ArvAVL *raiz){ // metodo explicado em aula, onde a rotacao d
 	ArvAVL no2;
 	no1 = (* raiz)-> esq;
 	no2 = (* raiz)-> esq -> dir; // dupla rot para direita, no2 está na sub arvore da direita do filho da esquerda e se tornará a nova raiz desta subarvore
-	
+
 	no1->dir = no2->esq;
 	(*raiz)->esq = no2->dir;
 	no2->esq = no1;
 	no2->dir = (* raiz);
-	
+
 	(*raiz)->alt = maior(alt_NO((*raiz)->esq), alt_NO((*raiz)->dir))+1;
 	no1->alt = maior(alt_NO(no1->dir), alt_NO(no1->esq))+1;
 	no2->alt = maior(alt_NO(no2->dir), alt_NO(no2->esq))+1;
-	
+
 	(*raiz) = no2;
-	
+
 }
 
 void Rot_dupla_esq (ArvAVL *raiz){ // metodo explicado em aula, onde a rotacao dupla a esquerda sera tratada com trocas de ponteiros e o ajuste braçal da arvore, neste caso a raiz da sub-arvore da direita do filho da esquerda se tornara a raiz da subarvore principal tratada.
@@ -173,19 +159,19 @@ void Rot_dupla_esq (ArvAVL *raiz){ // metodo explicado em aula, onde a rotacao d
 	ArvAVL no2;
 	no1 = (* raiz)-> dir;
 	no2 = (* raiz)-> dir -> esq; // dupla rot para esq, no2 está na sub arvore da esquerda do filho da direita e se tornará a nova raiz desta subarvore
-	
+
 	no1->esq = no2->dir;
 	(*raiz)->dir = no2->esq;
-	
+
 	no2->dir = no1;
 	no2->esq = (* raiz);
-	
+
 	(*raiz)->alt = maior(alt_NO((*raiz)->esq), alt_NO((*raiz)->dir))+1;
 	no1->alt = maior(alt_NO(no1->dir), alt_NO(no1->esq))+1;
 	no2->alt = maior(alt_NO(no2->dir), alt_NO(no2->esq))+1;
-	
+
 	(*raiz) = no2;
-	
+
 }
 
 
@@ -194,10 +180,10 @@ int insere_ArvAVL (ArvAVL *raiz, int chave){
 	int res;
 	if(*raiz == NULL){ // arvore vazia ou no folha
 		ArvAVL novo;
-		novo = (ArvAVL)malloc(sizeof(struct NO));
+		novo = (ArvAVL)malloc(sizeof(ArvAVL));
 		if(novo == NULL)
 			return 0;
-		
+
 		novo->chave = chave;
 		novo->alt = 0;
 		novo->esq = NULL;
@@ -205,7 +191,7 @@ int insere_ArvAVL (ArvAVL *raiz, int chave){
 		*raiz = novo;
 		return 1;
 	}
-	
+
 	ArvAVL atual = *raiz;
 	if(chave < atual->chave){  // inserção na sub arvore da esquerda
 		if((res = insere_ArvAVL(&(atual->esq), chave)) == 1){
@@ -219,9 +205,9 @@ int insere_ArvAVL (ArvAVL *raiz, int chave){
 			}
 		}
 	}
-	
+
 	else{
-	
+
 		if(chave > atual->chave){
 			if((res = insere_ArvAVL(&(atual->dir), chave)) == 1){
 				atual->alt = maior(alt_NO(atual->esq),alt_NO(atual->dir)) + 1;
@@ -234,13 +220,13 @@ int insere_ArvAVL (ArvAVL *raiz, int chave){
 				}
 			}
 		}
-		
+
 		else{
 			printf("Valor duplicado!!\n");
 			return 0;
 		}
 	}
-	
+
 	return res;
 }
 /*
@@ -249,7 +235,7 @@ int remove_ArvAVL(ArvAVL *raiz, int chave){
 		printf("Chave não existe!!\n");
 		return 0;
 	}
-	
+
 	int res;
 	if(chave < (*raiz)->chave){
 		if((res = remove_ArvAVL(&(*raiz)->esq,chave)) == 1){ // foi possivel remover  logo é necessario a remocao da arvore da direita.
@@ -261,7 +247,7 @@ int remove_ArvAVL(ArvAVL *raiz, int chave){
 			}
 		}
 	}
-	
+
 	if((*raiz)->chave < chave){
 		if((res = remove_ArvAVL(&(*raiz)->dir, chave)) == 1){
 			if(fatorBalanceamento_NO(*raiz) >= 2){
@@ -272,7 +258,7 @@ int remove_ArvAVL(ArvAVL *raiz, int chave){
 			}
 		}
 	}
-	
+
 	if((*raiz)->chave == chave){
 		if(((*raiz)->esq == NULL || (*raiz)->dir == NULL)){// nÛ tem 1 filho ou nenhum
 			struct NO *oldNode = (*raiz);
